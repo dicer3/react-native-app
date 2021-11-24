@@ -1,34 +1,60 @@
 import React,{ useState } from 'react';
-import { StyleSheet, Text, View ,Button} from 'react-native';
+import { StyleSheet, Text, View , ScrollView, FlatList , TouchableOpacity } from 'react-native';
+import Header from "./components/header"
+import TodoItem from "./components/todoItem"
+import AddTodo from './components/addTodo';
 
 export default function App() {
-  const [name,setName] = useState("shaun")
-  const [person,setPerson] = useState({name:"mario",age:40});
-  const clickHandler = () => {
-    setName("chun-li");
-    setPerson({name:'luigi',age:45})
+  const [todos,setTodos] = useState([
+      {text:'buy coffee',key:'1'},
+      {text:'create an app',key:'2'},
+      {text:'play on the switch',key:'3'}
+  ])
+
+  const pressHandler = (key) => {
+    setTodos((prevTodos)=>{
+        return prevTodos.filter(todo => todo.key != key)
+    })
   }
+
+  const submitHandler = (text) => {
+    setTodos((prevTodos)=>{
+      return [
+        { text , key:Math.random().toString() },
+        ...prevTodos
+      ]
+    })
+  }
+
   return (
+
     <View style={styles.container}>
-      <Text>My name is {name}</Text>
-      <Text>His name is {person.name} and his age is {person.age}</Text>
-      <View style={styles.buttonContainer}>
-        <Button title="update state" onPress={clickHandler}/>
-      </View>
-    </View>
-  );
+        {/* header */}
+        <Header />
+        <View style={styles.content}>
+          <AddTodo submitHandler={submitHandler}/>
+          <View style={styles.list}>
+              <FlatList
+                data={todos}
+                renderItem={({item}) => (
+                    <TodoItem item={item} pressHandler={pressHandler} />
+                )}
+              />
+          </View>
+        </View>
+     </View>
+  )     
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-    color:"orange"
   },
-  buttonContainer: {
-    marginTop: 20,
+  content: {
+    padding: 40,
+  },
+  list: {
+    marginTop:20,
   }
-
 });
