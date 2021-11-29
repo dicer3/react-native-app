@@ -7,8 +7,9 @@ const reviewDetails = ({navigation}) => {
     }
     return (
         <View style={globalStyles.container}>
-            <Text>Review Details Screen</Text>
-            <Button title='back to home screen' onPress={pressHandler}></Button>
+            <Text>{navigation.getParam("title")}</Text>
+            <Text>{navigation.getParam("body")}</Text>
+            <Text>{navigation.getParam("rating")}</Text>
         </View>
     )
 }
